@@ -37,9 +37,19 @@ In your application controller you can set it to fire as a filter using:
 And then adding to your controller:
 
     def geoip
-      @country_code = Geoip::Country.find_by_ip(request.remote_ip)
+        # Lookup the current request IP and assign to session vars, if we've looked
+        # it up before then skip further requests and return the session version
+        if session[:country_code].nil?
+          @country_code = Geoip::Country.find_by_ip(request.remote_ip)
+          session[:country_code] = @country_code
+        else
+          @country_code = session[:country_code]
+        end
+        return @country_code
     end
 
-That *geoip* function will call prior to each request for that controller. That
-may or may not be what you want but is a quick example.
+This will cache the first lookup to the users session; which is probably how
+you'll want to use it for most cases. To use elsewhere expose the method as a
+helper in your controller:
 
+    helper_method :geoip
