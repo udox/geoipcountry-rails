@@ -6,9 +6,15 @@ There are a few but they use the city/block tables and also seem to be mysql
 specific. As I don't want to try converting a bunch of Polygon code to postgres
 format I thought I'd just convert the fairly simple django geoip-redirect code.
 
+* [rack-geoip](https://github.com/ckraybill/rack-geoip)
+* [geoip-rails](https://github.com/priithaamer/geoip-rails)
+
 ## Database setup
 
-Grab this file: <http://geolite.maxmind.com/download/geoip/database/GeoIPCountryCSV.zip>.
+Grab the [country csv](http://geolite.maxmind.com/download/geoip/database/GeoIPCountryCSV.zip).
+
+    wget -O /tmp/csvdb.zip http://geolite.maxmind.com/download/geoip/database/GeoIPCountryCSV.zip;
+    unzip csvdb.zip;
 
 SQL for tables:
 
@@ -53,3 +59,9 @@ you'll want to use it for most cases. To use elsewhere expose the method as a
 helper in your controller:
 
     helper_method :geoip
+
+### Heroku
+
+Simply push your loaded country table to heroku.
+
+    heroku db:push --tables geoip_country
