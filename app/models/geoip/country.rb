@@ -23,8 +23,8 @@ module Geoip
 
       # Convert to decimal and try looking up the first matching row
       dec = to_dec(ip)
-      geo_located = self.where(:start_decimal => '>=%d' % dec, :end_decimal => '<=%d' % dec).first
-
+      geo_located = self.where(:start_decimal => '<=%d' % dec, :end_decimal => '>=%d' % dec).first
+      puts dec
       # See if we've got a code to return
       return geo_located.country_code unless geo_located.nil?
 
