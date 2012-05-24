@@ -26,7 +26,7 @@ module Geoip
       geo_located = self.where('start_decimal <= ?', dec).where('end_decimal >= ?', dec).first
 
       # See if we've got a code to return
-      return geo_located.country_code unless geo_located.nil?
+      return geo_located.country_code.downcase unless geo_located.nil?
 
       # Return a default in all other cases
       return DEFAULT_CODE
